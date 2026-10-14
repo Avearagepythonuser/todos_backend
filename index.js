@@ -1,11 +1,13 @@
 import express from "express"
 import dotenv from "dotenv"
 import connection from "./src/db/configDatabase.js"
+import cors from "cors";
 
 dotenv.config()
 
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 const PORT = process.env.PORT || 8000
 
@@ -52,5 +54,13 @@ app.delete("/todos/:id", async (req, res) => {
     }
 })
 
+app.post("/todos/login", (req, res) => {
+    const {username, password} = req.body;
+    if (username == process.env.LOGIN_USERNAME && password == process.env.LOGIN_PASSWORD) {
+        res.status(200).json({success: true, msg:"Sikeres bejelentkezés!"})
+    } else {
+        res.status(400).json({success: false, msg:"Sikertelen bejelentkezés"})
+    }
+})
 
 app.listen(PORT, ()=> console.log(`Szerver is listening on port: ${PORT}...`))
