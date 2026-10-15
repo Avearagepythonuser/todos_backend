@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8000
 
 app.get("/todos", async (req, res) => {
     try {
-        const sql = "SELECT * FROM todolist ORDER BY timestamp;"
+        const sql = "SELECT * FROM todolist ORDER BY complete, timestamp;"
         const [rows, fields] = await connection.execute(sql);
         res.status(200).json(rows)
     } catch (err) {
@@ -37,7 +37,7 @@ app.patch("/todos/:id", async (req, res) => {
         const {id} = req.params
         const sql = "UPDATE todolist SET complete=NOT complete WHERE id=?"
         const [rows, fields] = await connection.execute(sql, [id]);
-        res.status(200).json({msg: "Sikeres hozzáadás"})
+        res.status(200).json({msg: "Sikeres módosítás"})
     } catch (err) {
         console.log(err)
     }
@@ -48,7 +48,7 @@ app.delete("/todos/:id", async (req, res) => {
         const {id} = req.params
         const sql = "DELETE FROM `todolist` WHERE id=?"
         const [rows, fields] = await connection.execute(sql, [id]);
-        res.status(200).json({msg: "Sikeres hozzáadás"})
+        res.status(200).json({msg: "Sikeres törlés"})
     } catch (err) {
         console.log(err)
     }
